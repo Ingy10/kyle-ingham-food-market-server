@@ -6,7 +6,7 @@ const knex = initKnex(configuration);
 // Get all CPI items
 const getAllProvincialCpiItems = async (req, res) => {
   try {
-    const province = req.body.province;
+    const province = req.params.province;
 
     const itemList = await knex("cpi_items")
       .where({ province: province })

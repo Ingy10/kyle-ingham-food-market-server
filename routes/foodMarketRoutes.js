@@ -5,6 +5,8 @@ import * as listController from "../controllers/list-controller.js";
 const router = express.Router();
 
 // Compare page routes
-router.route("/compare").get(compareController.getAllProvincialCpiItems);
+router
+  .route("/compare/:userId/:province")
+  .get(compareController.getAllProvincialCpiItems);
 
 export default router;
