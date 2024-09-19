@@ -9,4 +9,9 @@ router
   .route("/compare/:userId/:province")
   .get(compareController.getAllProvincialCpiItems);
 
+//List page routes
+router
+  .route("/grocery-list/:userId/:province/:groceryListId")
+  .post(listController.addItemToList);
+
 export default router;
