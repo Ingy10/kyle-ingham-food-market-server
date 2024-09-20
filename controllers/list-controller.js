@@ -72,4 +72,22 @@ const getListItems = async (req, res) => {
   }
 };
 
-export { addItemToList, deleteItem, getListItems };
+// Route to update active state for a given grocery list item
+const activeState = async (req, res) => {
+  const id = req.body.id;
+  const active = req.body.active_state;
+  try {
+    const item = await knex("grocery_list_items")
+      .where({ id: id })
+      .update({ active_state: active })
+      .select("*");
+    if (item.length === 0) {
+      return res.status(404).json(`Item with id: ${id} not found`);
+    }
+    res.status(204).end();
+  } catch (error) {
+    res.status(500).json(`${error}`);
+  }
+};
+
+export { addItemToList, deleteItem, getListItems, activeState };

@@ -14,6 +14,7 @@ router
   .route("/grocery-list/:userId/:province/:groceryListId")
   .post(listController.addItemToList)
   .delete(listController.deleteItem)
-  .get(listController.getListItems);
+  .get(listController.getListItems)
+  .patch(listController.activeState);
 
 export default router;
