@@ -50,9 +50,17 @@ const deleteItem = async (req, res) => {
 const getListItems = async (req, res) => {
   const listId = req.params.groceryListId;
   try {
-    const listItems = await knex("grocery_list_items")
-      .where({ grocery_list_id: listId })
-      .select("*");
+    const listItems = await knex("grocery_list_items as g")
+      .leftJoin("cpi_items as c", "g.cpi_item_id", "c.id")
+      .where({ "g.grocery_list_id": listId })
+      .select(
+        "g.id as grocery_list_item_id",
+        "g.active_state",
+        "g.item_name as grocery_list_item_name",
+        "g.category as grocery_list_category",
+        "c.market_price",
+        "c.unit_of_measure"
+      );
 
     if (listId.length === 0) {
       return res.status(404).json(`List with id ${listId} not found`);
