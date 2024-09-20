@@ -12,6 +12,8 @@ router
 //List page routes
 router
   .route("/grocery-list/:userId/:province/:groceryListId")
-  .post(listController.addItemToList);
+  .post(listController.addItemToList)
+  .delete(listController.deleteItem)
+  .get(listController.getListItems);
 
 export default router;

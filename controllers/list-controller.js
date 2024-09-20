@@ -3,6 +3,7 @@ import configuration from "../knexfile.js";
 
 const knex = initKnex(configuration);
 
+// route to add new list item
 const addItemToList = async (req, res) => {
   try {
     if (
@@ -26,4 +27,41 @@ const addItemToList = async (req, res) => {
     res.status(500).json(`${error}`);
   }
 };
-export { addItemToList };
+
+// route to delete list item
+const deleteItem = async (req, res) => {
+  const id = req.body.id;
+  const itemName = req.body.item_name;
+  try {
+    const listItem = await knex("grocery_list_items").where({ id });
+    if (listItem.length === 0) {
+      return res
+        .status(404)
+        .json(`Item with ID ${id} and name ${itemName} not found`);
+    }
+    await knex("grocery_list_items").where({ id }).del();
+    res.status(204).end();
+  } catch (error) {
+    res.status(500).json(`${error}`);
+  }
+};
+
+// Get all items for a selected list for a given user
+const getListItems = async (req, res) => {
+  const listId = req.params.groceryListId;
+  try {
+    const listItems = await knex("grocery_list_items")
+      .where({ grocery_list_id: listId })
+      .select("*");
+
+    if (listId.length === 0) {
+      return res.status(404).json(`List with id ${listId} not found`);
+    }
+
+    res.status(200).json(listItems);
+  } catch (error) {
+    res.status(500).json(`${error}`);
+  }
+};
+
+export { addItemToList, deleteItem, getListItems };
