@@ -57,9 +57,21 @@ const deleteItems = async (req, res) => {
 const getListItems = async (req, res) => {
   const listId = req.params.groceryListId;
   try {
+    const subquery = knex("user_items")
+      .select("user_item_name", "unit_of_measure")
+      .avg("user_item_price as avg_user_price")
+      .groupBy("user_item_name", "unit_of_measure");
+
     const listItems = await knex("grocery_list_items as g")
       .leftJoin("cpi_items as c", "g.cpi_item_id", "c.id")
       .leftJoin("user_items as u", "g.user_item_id", "u.id")
+      .leftJoin(subquery.as("avg_prices"), function () {
+        this.on("u.user_item_name", "=", "avg_prices.user_item_name").andOn(
+          "u.unit_of_measure",
+          "=",
+          "avg_prices.unit_of_measure"
+        );
+      })
       .where({ "g.grocery_list_id": listId })
       .select(
         "g.id as grocery_list_item_id",
@@ -67,9 +79,11 @@ const getListItems = async (req, res) => {
         "g.item_name as grocery_list_item_name",
         "g.category as grocery_list_category",
         "c.market_price",
-        "c.unit_of_measure",
+        "c.unit_of_measure as cpi_unit_of_measure",
         "u.user_item_price",
-        "u.unit_of_measure as user_unit_of_measure"
+        "u.unit_of_measure as user_unit_of_measure",
+        "avg_prices.avg_user_price",
+        "avg_prices.unit_of_measure as avg_price_unit_of_measure"
       );
 
     if (listId.length === 0) {
