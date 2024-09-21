@@ -59,6 +59,7 @@ const getListItems = async (req, res) => {
   try {
     const listItems = await knex("grocery_list_items as g")
       .leftJoin("cpi_items as c", "g.cpi_item_id", "c.id")
+      .leftJoin("user_items as u", "g.user_item_id", "u.id")
       .where({ "g.grocery_list_id": listId })
       .select(
         "g.id as grocery_list_item_id",
@@ -66,7 +67,9 @@ const getListItems = async (req, res) => {
         "g.item_name as grocery_list_item_name",
         "g.category as grocery_list_category",
         "c.market_price",
-        "c.unit_of_measure"
+        "c.unit_of_measure",
+        "u.user_item_price",
+        "u.unit_of_measure as user_unit_of_measure"
       );
 
     if (listId.length === 0) {
