@@ -79,8 +79,7 @@ const activeState = async (req, res) => {
   try {
     const item = await knex("grocery_list_items")
       .where({ id: id })
-      .update({ active_state: active })
-      .select("*");
+      .update({ active_state: active });
     if (item.length === 0) {
       return res.status(404).json(`Item with id: ${id} not found`);
     }
@@ -90,4 +89,22 @@ const activeState = async (req, res) => {
   }
 };
 
-export { addItemToList, deleteItem, getListItems, activeState };
+// Route to reset active state for all items on a given grocery list
+const resetList = async (req, res) => {
+  const groceryId = req.params.groceryListId;
+  const active = 1;
+  try {
+    const itemsAffected = await knex("grocery_list_items")
+      .where({ grocery_list_id: groceryId, active_state: 0 })
+      .andWhere("id", ">", 0)
+      .update({ active_state: active });
+    if (itemsAffected === 0) {
+      return res.status(404).json(`Grocery list with id: ${id} not found`);
+    }
+    res.status(200).json({ message: `Updated ${itemsAffected} items` });
+  } catch (error) {
+    res.status(500).json(`${error}`);
+  }
+};
+
+export { addItemToList, deleteItem, getListItems, activeState, resetList };

@@ -17,4 +17,8 @@ router
   .get(listController.getListItems)
   .patch(listController.activeState);
 
+router
+  .route("/grocery-list/:userId/:province/:groceryListId/reset")
+  .patch(listController.resetList);
+
 export default router;
