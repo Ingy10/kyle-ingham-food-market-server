@@ -13,7 +13,7 @@ router
 router
   .route("/grocery-list/:userId/:province/:groceryListId")
   .post(listController.addItemToList)
-  .delete(listController.deleteItem)
+  .delete(listController.deleteItems)
   .get(listController.getListItems)
   .patch(listController.activeState);
 

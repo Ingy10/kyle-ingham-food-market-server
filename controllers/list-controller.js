@@ -29,18 +29,25 @@ const addItemToList = async (req, res) => {
 };
 
 // route to delete list item
-const deleteItem = async (req, res) => {
-  const id = req.body.id;
-  const itemName = req.body.item_name;
+const deleteItems = async (req, res) => {
+  const id = req.params.groceryListId;
   try {
-    const listItem = await knex("grocery_list_items").where({ id });
-    if (listItem.length === 0) {
-      return res
-        .status(404)
-        .json(`Item with ID ${id} and name ${itemName} not found`);
+    const itemCount = await knex("grocery_list_items")
+      .where({
+        active_state: 0,
+        grocery_list_id: id,
+      })
+      .andWhere("id", ">", 0)
+      .count("* as count")
+      .first();
+    if (itemCount.count === 0) {
+      return res.status(404).json(`No items to delete`);
     }
-    await knex("grocery_list_items").where({ id }).del();
-    res.status(204).end();
+    await knex("grocery_list_items")
+      .where({ active_state: 0, grocery_list_id: id })
+      .andWhere("id", ">", 0)
+      .del();
+    res.status(200).json(`${itemCount.count} items deleted`);
   } catch (error) {
     res.status(500).json(`${error}`);
   }
@@ -107,4 +114,4 @@ const resetList = async (req, res) => {
   }
 };
 
-export { addItemToList, deleteItem, getListItems, activeState, resetList };
+export { addItemToList, deleteItems, getListItems, activeState, resetList };
