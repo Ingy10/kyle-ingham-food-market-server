@@ -78,6 +78,7 @@ const deleteItems = async (req, res) => {
 // Get all items for a selected list for a given user
 const getListItems = async (req, res) => {
   const listId = req.params.groceryListId;
+  console.log(listId);
   try {
     const listItems = await knex("grocery_list_items as g")
       .leftJoin("cpi_items as c", "g.cpi_item_id", "c.id")
@@ -111,8 +112,8 @@ const getListItems = async (req, res) => {
         knex.raw("AVG(u.user_item_price) as avg_user_price")
       );
 
-    if (listId.length === 0) {
-      return res.status(404).json(`List with id ${listId} not found`);
+    if (listItems.length === 0) {
+      return res.status(404).json(`No items found for list with id ${listId}`);
     }
 
     res.status(200).json(listItems);
@@ -156,6 +157,22 @@ const resetList = async (req, res) => {
   }
 };
 
+// Get all user entered items
+const getUserItems = async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const userItems = await knex("user_items")
+      .where({ user_id: userId })
+      .select("*");
+    if (userItems.length === 0) {
+      res.status(404).json(`No items found for user with id ${userId}`);
+    }
+    res.status(200).json(userItems);
+  } catch (error) {
+    res.status(500).json(`${error}`);
+  }
+};
+
 export {
   addItemToList,
   deleteItems,
@@ -163,4 +180,5 @@ export {
   activeState,
   resetList,
   addUserItem,
+  getUserItems,
 };

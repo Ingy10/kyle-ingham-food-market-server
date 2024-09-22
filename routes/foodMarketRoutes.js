@@ -25,4 +25,8 @@ router
   .route("/grocery-list/:userId/:province/:groceryListId/buy")
   .post(listController.addUserItem);
 
+router
+  .route("/grocery-list/:userId/:province/:groceryListId/user")
+  .get(listController.getUserItems);
+
 export default router;
