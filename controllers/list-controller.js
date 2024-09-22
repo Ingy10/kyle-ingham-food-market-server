@@ -81,7 +81,13 @@ const getListItems = async (req, res) => {
   try {
     const listItems = await knex("grocery_list_items as g")
       .leftJoin("cpi_items as c", "g.cpi_item_id", "c.id")
-      .leftJoin("user_items as u", "g.item_name", "u.user_item_name")
+      .leftJoin("user_items as u", function () {
+        this.on("g.item_name", "=", "u.user_item_name").andOn(
+          "u.date_added",
+          ">=",
+          knex.raw("DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 6 MONTH)")
+        );
+      })
       .where({ "g.grocery_list_id": listId })
       .groupBy(
         "g.id",
