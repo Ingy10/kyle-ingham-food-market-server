@@ -30,15 +30,13 @@ const addItemToList = async (req, res) => {
 
 // Route to add item and price to the user item table
 const addUserItem = async (req, res) => {
-  const province = req.params.province;
-  const userId = req.params.userId;
   if (
     !req.body.user_item_name ||
     !req.body.user_item_price ||
     !req.body.category ||
     !req.body.unit_of_measure ||
-    !province ||
-    !userId
+    !req.body.province ||
+    !req.body.user_id
   ) {
     return res.status(400).json("Please provide all required item information");
   }
