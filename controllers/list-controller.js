@@ -100,6 +100,7 @@ const getListItems = async (req, res) => {
       .select(
         "g.id as grocery_list_item_id",
         "g.active_state",
+        "g.cpi_item_id",
         "g.item_name as grocery_list_item_name",
         "g.category as grocery_list_category",
         "c.market_price",
