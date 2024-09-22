@@ -28,6 +28,28 @@ const addItemToList = async (req, res) => {
   }
 };
 
+// Route to add item and price to the user item table
+const addUserItem = async (req, res) => {
+  const province = req.params.province;
+  if (
+    !req.body.user_item_name ||
+    !req.body.user_item_price ||
+    !req.body.category ||
+    !req.body.unit_of_measure ||
+    !province
+  ) {
+    return res.status(400).json("Please provide all required item information");
+  }
+  try {
+    const updatedItem = await knex("user_items").insert(req.body);
+    const newItemId = updatedItem[0];
+    const item = await knex("user_items").where({ id: newItemId }).select("*");
+    res.status(201).json(item);
+  } catch (error) {
+    res.status(500).json(`${error}`);
+  }
+};
+
 // route to delete list item
 const deleteItems = async (req, res) => {
   const id = req.params.groceryListId;
@@ -131,4 +153,11 @@ const resetList = async (req, res) => {
   }
 };
 
-export { addItemToList, deleteItems, getListItems, activeState, resetList };
+export {
+  addItemToList,
+  deleteItems,
+  getListItems,
+  activeState,
+  resetList,
+  addUserItem,
+};

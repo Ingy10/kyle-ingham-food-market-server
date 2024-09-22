@@ -21,4 +21,8 @@ router
   .route("/grocery-list/:userId/:province/:groceryListId/reset")
   .patch(listController.resetList);
 
+router
+  .route("/grocery-list/:userId/:province/:groceryListId/buy")
+  .post(listController.addUserItem);
+
 export default router;
