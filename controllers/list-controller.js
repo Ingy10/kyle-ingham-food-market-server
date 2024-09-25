@@ -78,7 +78,6 @@ const deleteItems = async (req, res) => {
 // Get all items for a selected list for a given user
 const getListItems = async (req, res) => {
   const listId = req.params.groceryListId;
-  console.log(listId);
   try {
     const listItems = await knex("grocery_list_items as g")
       .leftJoin("cpi_items as c", "g.cpi_item_id", "c.id")
