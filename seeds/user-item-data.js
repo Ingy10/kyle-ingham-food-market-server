@@ -8,12 +8,12 @@ export async function seed(knex) {
   await knex("user_items").insert([
     {
       cpi_item_id: 1,
-      user_item_name: 1,
+      user_item_name: "blueberries",
       user_item_price: 11.8,
-      category: "other",
-      item_name: "blueberries",
+      category: "fruit",
       unit_of_measure: "kg",
-      province: "ontario",
+      province: "alberta",
+      user_id: 1,
     },
   ]);
 }
