@@ -4,8 +4,8 @@
  */
 export async function seed(knex) {
   // Deletes ALL existing entries
-  await knex("grocery_list_items").del();
-  await knex("grocery_list_items").insert([
+  await knex("user_items").del();
+  await knex("user_items").insert([
     {
       cpi_item_id: 1,
       user_item_name: 1,
