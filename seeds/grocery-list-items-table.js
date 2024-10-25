@@ -10,8 +10,8 @@ export async function seed(knex) {
       grocery_list_id: 1,
       user_item_id: 1,
       active_state: true,
-      province: "Ontario",
-      item_name: "strawberries",
+      province: "Alberta",
+      item_name: "Strawberries",
       category: "fruit",
     },
   ]);

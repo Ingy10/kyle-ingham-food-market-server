@@ -8,7 +8,7 @@ export async function seed(knex) {
   await knex("user_items").insert([
     {
       cpi_item_id: 1,
-      user_item_name: "blueberries",
+      user_item_name: "Blueberries",
       user_item_price: 11.8,
       category: "fruit",
       unit_of_measure: "kg",
